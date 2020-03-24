@@ -19,5 +19,5 @@ module.exports = {
 
     let result = response.json({ id });
     return result;
-  }
+  },
 };

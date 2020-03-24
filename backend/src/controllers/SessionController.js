@@ -12,5 +12,5 @@ module.exports = {
 
     const result = response.json(ong);
     return result;
-  }
+  },
 };

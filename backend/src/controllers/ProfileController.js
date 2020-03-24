@@ -9,5 +9,5 @@ module.exports = {
     const incidents = await connection(incidentEntity.tableName).where(incidentEntity.ong_id, ong_id).select('*');
     var result = response.json(incidents);
     return result;
-  }
+  },
 };

@@ -46,5 +46,5 @@ module.exports = {
 
     await connection(incident.tableName).where(incidentEntity.id, id).delete();
     return response.status(204).send();
-  }
+  },
 };
