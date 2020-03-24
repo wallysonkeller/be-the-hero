@@ -1,19 +1,19 @@
-const incidentConfig = require('../entities/IncidentEntity');
-const ongConfig = require('../entities/OngEntity');
+const incidentEntity = require('../entities/IncidentEntity');
+const ongEntity = require('../entities/OngEntity');
 
 exports.up = function (knex) {
-  return knex.schema.createTable(incidentConfig.tableName, function (table) {
+  return knex.schema.createTable(incidentEntity.tableName, function (table) {
     table.increments();
-    table.string(incidentConfig.title).notNullable();
-    table.string(incidentConfig.description).notNullable();
-    table.decimal(incidentConfig.value).notNullable();
+    table.string(incidentEntity.title).notNullable();
+    table.string(incidentEntity.description).notNullable();
+    table.decimal(incidentEntity.value).notNullable();
 
-    table.string(incidentConfig.ong_id).notNullable();
-    table.foreign(incidentConfig.ong_id).references(ongConfig.id).inTable(ongConfig.tableName);
+    table.string(incidentEntity.ong_id).notNullable();
+    table.foreign(incidentEntity.ong_id).references(ongEntity.id).inTable(ongEntity.tableName);
   });
 };
 
 //npx knex migrate:rollback
 exports.down = function (knex) {
-  return knex.schema.dropTable(incidentConfig.tableName);
+  return knex.schema.dropTable(incidentEntity.tableName);
 };

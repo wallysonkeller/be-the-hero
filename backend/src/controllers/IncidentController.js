@@ -1,27 +1,27 @@
 const connection = require('../database/connection');
 
-const incidentConfig = require('../database/entities/IncidentEntity');
-const ongConfig = require('../database/entities/OngEntity');
+const incidentEntity = require('../database/entities/IncidentEntity');
+const ongEntity = require('../database/entities/OngEntity');
 
 module.exports = {
   async index(request, response) {
     const pageSize = 5;
     const { page = 1 } = request.query;
 
-    const [count] = await connection(incidentConfig.tableName).count(`${incidentConfig.id} as total`);
+    const [count] = await connection(incidentEntity.tableName).count(`${incidentEntity.id} as total`);
     response.header('X-Total-Count', count['total']);
 
-    const incidents = await connection(incidentConfig.tableName)
-      .join(ongConfig.tableName, `${ongConfig.tableName}.${ongConfig.id}`, '=', `${incidentConfig.tableName}.${incidentConfig.ong_id}`)
+    const incidents = await connection(incidentEntity.tableName)
+      .join(ongEntity.tableName, `${ongEntity.tableName}.${ongEntity.id}`, '=', `${incidentEntity.tableName}.${incidentEntity.ong_id}`)
       .limit(pageSize)
       .offset((page - 1) * pageSize)
       .select([
-        `${incidentConfig.tableName}.*`,
-        `${ongConfig.tableName}.${ongConfig.name}`,
-        `${ongConfig.tableName}.${ongConfig.email}`,
-        `${ongConfig.tableName}.${ongConfig.whatsapp}`,
-        `${ongConfig.tableName}.${ongConfig.city}`,
-        `${ongConfig.tableName}.${ongConfig.uf}`]);
+        `${incidentEntity.tableName}.*`,
+        `${ongEntity.tableName}.${ongEntity.name}`,
+        `${ongEntity.tableName}.${ongEntity.email}`,
+        `${ongEntity.tableName}.${ongEntity.whatsapp}`,
+        `${ongEntity.tableName}.${ongEntity.city}`,
+        `${ongEntity.tableName}.${ongEntity.uf}`]);
     var result = response.json(incidents);
     return result;
   },
@@ -40,11 +40,11 @@ module.exports = {
     const { id } = request.params;
     const ong_id = request.headers.authorization;
 
-    const incident = await connection(incident.tableName).where(incidentConfig.id, id).select(incidentConfig.ong_id).first();
+    const incident = await connection(incident.tableName).where(incidentEntity.id, id).select(incidentEntity.ong_id).first();
     if (!incident || incident.ong_id !== ong_id)
       return response.status(401).json({ error: 'Operation not permitted.' });
 
-    await connection(incident.tableName).where(incidentConfig.id, id).delete();
+    await connection(incident.tableName).where(incidentEntity.id, id).delete();
     return response.status(204).send();
   }
 };
