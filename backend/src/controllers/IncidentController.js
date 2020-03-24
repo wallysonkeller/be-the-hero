@@ -2,15 +2,16 @@ const connection = require('../database/connection');
 
 module.exports = {
   async index(request, response) {
+    const pageSize = 5;
     const { page = 1 } = request.query;
 
-    const [count] = await connection('incidents').count();
-    response.header('X-Total-Count', count['count(*)']);
+    const [count] = await connection('incidents').count('id as total');
+    response.header('X-Total-Count', count['total']);
 
     const incidents = await connection('incidents')
       .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
-      .limit(5)
-      .offset((page - 1) * 5)
+      .limit(pageSize)
+      .offset((page - 1) * pageSize)
       .select([
         'incidents.*',
         'ongs.name',
