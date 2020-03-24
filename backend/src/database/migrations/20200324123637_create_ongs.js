@@ -1,15 +1,17 @@
+const ongConfig = require('../entities/OngEntity');
+
 exports.up = function (knex) {
-  return knex.schema.createTable('ongs', function (table) {
-    table.string('id').primary();
-    table.string('name').notNullable();
-    table.string('email').notNullable();
-    table.string('whatsapp').notNullable();
-    table.string('city').notNullable();
-    table.string('uf', 2).notNullable();
+  return knex.schema.createTable(ongConfig.tableName, function (table) {
+    table.string(ongConfig.id).primary();
+    table.string(ongConfig.name).notNullable();
+    table.string(ongConfig.email).notNullable();
+    table.string(ongConfig.whatsapp).notNullable();
+    table.string(ongConfig.city).notNullable();
+    table.string(ongConfig.uf, 2).notNullable();
   });
 };
 
 //npx knex migrate:rollback
 exports.down = function (knex) {
-  return knex.schema.dropTable('ongs');
+  return knex.schema.dropTable(ongConfig.tableName);
 };
