@@ -31,7 +31,7 @@ module.exports = {
     const ong_id = request.headers.authorization;
     const incident = { title, description, value, ong_id };
 
-    const [id] = await connection(incident.tableName).insert(incident);
+    const [id] = await connection(incidentEntity.tableName).insert(incident);
     const result = response.json({ id });
     return result;
   },
@@ -40,11 +40,11 @@ module.exports = {
     const { id } = request.params;
     const ong_id = request.headers.authorization;
 
-    const incident = await connection(incident.tableName).where(incidentEntity.id, id).select(incidentEntity.ong_id).first();
+    const incident = await connection(incidentEntity.tableName).where(incidentEntity.id, id).select(incidentEntity.ong_id).first();
     if (!incident || incident.ong_id !== ong_id)
       return response.status(401).json({ error: 'Operation not permitted.' });
 
-    await connection(incident.tableName).where(incidentEntity.id, id).delete();
+    await connection(incidentEntity.tableName).where(incidentEntity.id, id).delete();
     return response.status(204).send();
   },
 };
