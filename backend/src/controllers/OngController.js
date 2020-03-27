@@ -1,11 +1,9 @@
 const crypto = require('crypto');
 const connection = require('../database/connection');
 
-const ongEntity = require('../database/entities/OngEntity');
-
 module.exports = {
   async index(request, response) {
-    const ongs = await connection(ongEntity.tableName).select('*');
+    const ongs = await connection('ongs').select('*');
     var result = response.json(ongs);
     return result;
   },
@@ -15,7 +13,7 @@ module.exports = {
     const id = crypto.randomBytes(4).toString('HEX');
 
     const ong = { id, name, email, whatsapp, city, uf };
-    await connection(ongEntity.tableName).insert(ong)
+    await connection('ongs').insert(ong)
 
     let result = response.json({ id });
     return result;
